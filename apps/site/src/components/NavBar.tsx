@@ -15,9 +15,7 @@ export function NavBar() {
       </div>
       <aside>
         <Switch
-          onCheckedChange={() =>
-            setTheme((prev) => (prev === "light" ? "dark" : "light"))
-          }
+          onCheckedChange={() => setTheme((prev) => (prev === "light" ? "dark" : "light"))}
           checked={theme === "dark"}
         />
       </aside>

@@ -10,9 +10,7 @@ export const metadata: Metadata = {
   icons: [{ rel: "icon", url: "/kepicon.png" }],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body>

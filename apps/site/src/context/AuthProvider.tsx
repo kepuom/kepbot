@@ -9,13 +9,7 @@ const AuthContext = createContext<User>({} as User);
 
 export const useAuthenticatedUser = () => useContext(AuthContext);
 
-export function AuthProvider({
-  user,
-  children,
-}: {
-  user: User;
-  children?: ReactNode;
-}) {
+export function AuthProvider({ user, children }: { user: User; children?: ReactNode }) {
   // useEffect(() => {
   //   const logoutAction = async () => {
   //     "use server";

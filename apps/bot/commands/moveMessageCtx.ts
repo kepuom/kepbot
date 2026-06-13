@@ -1,6 +1,15 @@
-import { ActionRowBuilder, ApplicationCommandType, DiscordAPIError, MessageContextMenuCommandInteraction, ModalBuilder, RESTJSONErrorCodes, TextInputBuilder, TextInputStyle } from "discord.js";
-import { sendWebhookMessage } from "~/handlers/sendWebhookMessage";
-import { createCommand } from "~/lib/createCommand";
+import {
+  ActionRowBuilder,
+  ApplicationCommandType,
+  type DiscordAPIError,
+  type MessageContextMenuCommandInteraction,
+  ModalBuilder,
+  RESTJSONErrorCodes,
+  TextInputBuilder,
+  TextInputStyle,
+} from "discord.js";
+import { sendWebhookMessage } from "../handlers/sendWebhookMessage.ts";
+import { createCommand } from "../lib/createCommand.ts";
 
 export const moveMessageCtxCommand = createCommand({
   data: {
@@ -8,23 +17,23 @@ export const moveMessageCtxCommand = createCommand({
     type: ApplicationCommandType.Message,
     defaultMemberPermissions: ["ManageMessages", "ManageChannels"],
   },
-  execute: async (interaction: MessageContextMenuCommandInteraction, data) => {
-    if (!interaction.guild) return
+  execute: async (interaction: MessageContextMenuCommandInteraction) => {
+    if (!interaction.guild) return;
     const message = interaction.targetMessage;
     const guildChannels = interaction.guild.channels;
     if (!guildChannels) return;
 
-    const channelIdField = `target_channel_id`
+    const channelIdField = `target_channel_id`;
 
     const modal = new ModalBuilder({
       title: `Move Message ${message.id}`,
       custom_id: `move_message-${message.id}-by-${interaction.user.id}`,
-    })
+    });
     const channelInput = new TextInputBuilder()
       .setStyle(TextInputStyle.Short)
       .setCustomId(channelIdField)
-      .setPlaceholder('Channel or Thread Id')
-      .setLabel('Channel Id')
+      .setPlaceholder("Channel or Thread Id")
+      .setLabel("Channel Id")
       .setRequired(true);
 
     const ar = new ActionRowBuilder<TextInputBuilder>().addComponents(channelInput);
@@ -47,21 +56,20 @@ export const moveMessageCtxCommand = createCommand({
         message,
         targetChannelId,
         user: interaction.user,
-      })
+      });
 
       await modalSubmitInteraction.editReply({
         content: `Message moved to https://discord.com/channels/${interaction.guild.id}/${sentMessage.channel_id}/${sentMessage.id}`,
       });
-
     } catch (err) {
-      await modalSubmitInteraction.editReply({ content: err!.toString() })
+      await modalSubmitInteraction.editReply({ content: err!.toString() });
       if (
-        // biome-ignore lint/suspicious/noDoubleEquals: idk it weird
+        // oxlint-disable-next-line eqeqeq -- idk it weird
         (err as DiscordAPIError).code == RESTJSONErrorCodes.MissingPermissions
       )
         await modalSubmitInteraction.editReply({
-          content: 'I am missing permissions',
+          content: "I am missing permissions",
         });
     }
-  }
-})
+  },
+});

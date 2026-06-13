@@ -29,9 +29,7 @@ export async function createAuthJWT({
   const secret = getAuthJWTSecret();
 
   const JWT = await createJWT(AuthJWTAlgo, secret, payload, {
-    expiresIn: expiresInSeconds
-      ? new TimeSpan(expiresInSeconds, "s")
-      : undefined,
+    expiresIn: expiresInSeconds ? new TimeSpan(expiresInSeconds, "s") : undefined,
   });
 
   return {
@@ -56,8 +54,7 @@ export async function getUser() {
   try {
     const JWT = await validateAuthJWT(auth.value);
 
-    if (JWT.expiresAt && JWT.expiresAt < new Date())
-      throw new Error("JWT expired");
+    if (JWT.expiresAt && JWT.expiresAt < new Date()) throw new Error("JWT expired");
     console.log("getUser:", JWT.payload);
     return payloadSchema.parse(JWT.payload);
   } catch (error) {

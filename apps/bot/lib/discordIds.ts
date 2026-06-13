@@ -16,9 +16,9 @@ export const discordIds = {
   },
   roles: {
     admin: "690268284192424108",
-    moderator: "831129785496895498"
+    moderator: "831129785496895498",
   },
   members: {
-    emailBot: "895056197789564969"
-  }
+    emailBot: "895056197789564969",
+  },
 } as const;

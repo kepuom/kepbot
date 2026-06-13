@@ -1,8 +1,8 @@
 import { REST, Routes, type APIApplicationCommand } from "discord.js";
 import { parseArgs } from "util";
 
-const { values, positionals } = parseArgs({
-  args: Bun.argv,
+const { values } = parseArgs({
+  args: process.argv.slice(2),
   options: {
     guildId: {
       type: "string",
@@ -19,14 +19,11 @@ const { guildId, commandName } = values;
 
 // const commandToRegister = commands.find(c => commandName?.includes(c.data.name));
 if (!guildId || !commandName)
-  throw "guildId and commandName are required\n Usage: bun registerCommands --guildId=<guildId> --commandName=<commandName1>,<commandName2>";
+  throw "guildId and commandName are required\n Usage: pnpm deleteCommand -- --guildId=<guildId> --commandName=<commandName1>,<commandName2>";
 
 const rest = new REST().setToken(process.env.BOT_TOKEN as string);
 const commands = (await rest.get(
-  Routes.applicationGuildCommands(
-    process.env.DISCORD_CLIENT_ID as string,
-    guildId
-  )
+  Routes.applicationGuildCommands(process.env.DISCORD_CLIENT_ID as string, guildId),
 )) as APIApplicationCommand[];
 const commandToDelete = commands.find((c) => c.name === commandName);
 if (!commandToDelete)
@@ -36,10 +33,8 @@ const data = await rest.delete(
   Routes.applicationGuildCommand(
     process.env.DISCORD_CLIENT_ID as string,
     guildId,
-    commandToDelete.id
-  )
+    commandToDelete.id,
+  ),
 );
-console.log(
-  `Successfully registered command ${commandName.toString()} in guild ${guildId}`
-);
+console.log(`Successfully registered command ${commandName.toString()} in guild ${guildId}`);
 console.log(data);

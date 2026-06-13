@@ -41,9 +41,7 @@
       "compositePrimaryKeys": {
         "responses_id": {
           "name": "responses_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {}

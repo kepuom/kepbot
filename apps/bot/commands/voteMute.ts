@@ -5,18 +5,16 @@ import {
   ButtonStyle,
   Colors,
   ComponentType,
-  DiscordAPIError,
-  Embed,
+  type DiscordAPIError,
   EmbedBuilder,
-  MessageContextMenuCommandInteraction,
+  type MessageContextMenuCommandInteraction,
   RESTJSONErrorCodes,
   TimestampStyles,
-  User,
   time,
   userMention,
 } from "discord.js";
-import { createCommand } from "~/lib/createCommand";
-import { discordIds } from "~/lib/discordIds";
+import { createCommand } from "../lib/createCommand.ts";
+import { discordIds } from "../lib/discordIds.ts";
 
 const MIN_VOTES_REQUIRED = 2;
 const MUTE_VOTE_TIME = 30 * 60 * 1000;
@@ -29,9 +27,8 @@ export const voteMuteCommand = createCommand({
     name: "efyges",
     type: ApplicationCommandType.Message,
   },
-  execute: async (interaction: MessageContextMenuCommandInteraction, data) => {
-    if (!interaction.guild)
-      return interaction.reply({ content: "Use in guild" });
+  execute: async (interaction: MessageContextMenuCommandInteraction) => {
+    if (!interaction.guild) return interaction.reply({ content: "Use in guild" });
     const userId = interaction.targetMessage.author.id;
 
     if (interaction.targetMessage.author.bot)
@@ -77,19 +74,7 @@ export const voteMuteCommand = createCommand({
       style: ButtonStyle.Success,
       emoji: "😊",
     });
-    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      efygesButton,
-      emeinesButton
-    );
-
-    const disabledRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
-      ButtonBuilder.from(efygesButton)
-        .setDisabled(true)
-        .setCustomId(`${efygesButtonId}-disabled`),
-      ButtonBuilder.from(emeinesButton)
-        .setDisabled(true)
-        .setCustomId(`${emeinesButtonId}-disabled`)
-    );
+    const row = new ActionRowBuilder<ButtonBuilder>().addComponents(efygesButton, emeinesButton);
 
     const embed = new EmbedBuilder({
       author: {
@@ -101,10 +86,7 @@ export const voteMuteCommand = createCommand({
       fields: [
         {
           name: "Vote ends in",
-          value: time(
-            new Date(Date.now() + DISPOSE_TIME),
-            TimestampStyles.RelativeTime
-          ),
+          value: time(new Date(Date.now() + DISPOSE_TIME), TimestampStyles.RelativeTime),
         },
       ],
     });
@@ -147,14 +129,14 @@ export const voteMuteCommand = createCommand({
       });
     });
 
-    collector.on("end", async (collected, reason) => {
+    collector.on("end", async (collected) => {
       const { efygesCount, emeinesCount } = collected.reduce(
         (acc, curr) => {
           if (curr.customId === efygesButtonId) acc.efygesCount++;
           else if (curr.customId === emeinesButtonId) acc.emeinesCount++;
           return acc;
         },
-        { efygesCount: 0, emeinesCount: 0 }
+        { efygesCount: 0, emeinesCount: 0 },
       );
 
       const resultEmbed = EmbedBuilder.from(embed).addFields([
@@ -184,10 +166,7 @@ export const voteMuteCommand = createCommand({
             ],
           });
         } catch (err) {
-          if (
-            (err as DiscordAPIError).code ===
-            RESTJSONErrorCodes.MissingPermissions
-          ) {
+          if ((err as DiscordAPIError).code === RESTJSONErrorCodes.MissingPermissions) {
             await interaction.editReply({
               content: `Missing Permissions 💥`,
               components: [],
@@ -198,27 +177,18 @@ export const voteMuteCommand = createCommand({
       } else {
         await interaction.editReply({
           content: `${userMention(userId)} 😊 emeines.${
-            efygesCount < emeinesCount
-              ? ` ${userMention(interaction.user.id)} efyges 👋`
-              : ""
+            efygesCount < emeinesCount ? ` ${userMention(interaction.user.id)} efyges 👋` : ""
           } `,
           components: [],
           embeds: [resultEmbed.setColor(Colors.Green)],
         });
         if (efygesCount < emeinesCount) {
-          const interactionMember = await interaction.guild!.members.fetch(
-            interaction.user.id
-          );
-          await interactionMember.timeout(
-            MUTE_VOTE_TIME,
-            `ΚΕΠ DEMOCRACY CONSEQUENCES`
-          );
+          const interactionMember = await interaction.guild!.members.fetch(interaction.user.id);
+          await interactionMember.timeout(MUTE_VOTE_TIME, `ΚΕΠ DEMOCRACY CONSEQUENCES`);
         }
       }
       interaction.followUp({
-        content: `Results are in Folks. ${
-          efygesCount + emeinesCount
-        } votes 👀 🥁`,
+        content: `Results are in Folks. ${efygesCount + emeinesCount} votes 👀 🥁`,
       });
     });
   },

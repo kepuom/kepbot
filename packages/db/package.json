@@ -1,17 +1,19 @@
 {
-	"name": "@kepbot/db",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"generate": "drizzle-kit generate:mysql",
-		"migrate": "pnpm with-env tsx migrate.ts",
-		"with-env": "dotenv -e ../../.env --"
-	},
-	"dependencies": {
-		"drizzle-orm": "^0.29.3",
-		"mysql2": "^3.9.1"
-	},
-	"devDependencies": {
-		"tsx": "^4.19.1"
-	}
+  "name": "@kepbot/db",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./responses": "./responses.ts"
+  },
+  "scripts": {
+    "generate": "drizzle-kit generate:mysql",
+    "migrate": "pnpm with-env node migrate.ts",
+    "check-types": "tsgo --noEmit",
+    "with-env": "dotenv -e ../../.env --"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.29.3",
+    "mysql2": "^3.9.1"
+  }
 }

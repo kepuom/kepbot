@@ -5,8 +5,8 @@ export const responses = mysqlTable("responses", {
   text: text("text").notNull(),
   userId: varchar("userId", { length: 20 }).notNull(),
   trigger: text("trigger"),
-  targetId: varchar("targetId", { length: 20 })
-})
+  targetId: varchar("targetId", { length: 20 }),
+});
 
-export type Response = typeof responses.$inferSelect
-export type ResponseInsert = typeof responses.$inferInsert
+export type Response = typeof responses.$inferSelect;
+export type ResponseInsert = typeof responses.$inferInsert;
