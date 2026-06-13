@@ -2,13 +2,13 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "NodeNext",
     "moduleDetection": "force",
     "jsx": "react-jsx",
     "allowJs": true,
 
-    /* Bundler mode */
-    "moduleResolution": "bundler",
+    /* Node native TypeScript execution */
+    "moduleResolution": "nodenext",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
@@ -18,11 +18,6 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "paths": {
-      // "~db": ["../../packages/db"],
-      "~/*": ["./*"],
-      
-      
-    }
+    "paths": {}
   }
 }

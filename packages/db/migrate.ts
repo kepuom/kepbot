@@ -1,12 +1,10 @@
 import { drizzle } from "drizzle-orm/mysql2";
 import { migrate } from "drizzle-orm/mysql2/migrator";
 import mysql from "mysql2/promise";
-import * as responses from "./schema/responses";
+import * as responses from "./schema/responses.ts";
 
 //* For the built in migrate function with DDL migrations we and drivers strongly encourage you to use single client connection.
-const connection = await mysql.createConnection(
-  process.env.DATABASE_URL as string
-);
+const connection = await mysql.createConnection(process.env.DATABASE_URL as string);
 const db = drizzle(connection, {
   schema: { ...responses },
   mode: "default",

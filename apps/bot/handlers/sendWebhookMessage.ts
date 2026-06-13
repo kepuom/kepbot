@@ -8,7 +8,7 @@ import {
   type Message,
   type User,
 } from "discord.js";
-import { discordIds } from "~/lib/discordIds";
+import { discordIds } from "../lib/discordIds.ts";
 
 type Props = {
   targetChannelId: GuildChannel["id"];
@@ -23,45 +23,22 @@ export async function sendWebhookMessage({
   targetChannelId,
   user,
 }: Props) {
-  const {
-    announcements,
-    readme,
-    rules,
-    neaEnimerwseis,
-    themata,
-    lyseis,
-    starboard,
-  } = discordIds.channels;
+  const { announcements, readme, rules, neaEnimerwseis, themata, lyseis, starboard } =
+    discordIds.channels;
   if (
     (
-      [
-        announcements,
-        readme,
-        rules,
-        neaEnimerwseis,
-        themata,
-        lyseis,
-        starboard,
-      ] as string[]
+      [announcements, readme, rules, neaEnimerwseis, themata, lyseis, starboard] as string[]
     ).includes(targetChannelId)
   )
     throw `MoveMessage: Target Channel ${targetChannelId} is not allowed`;
   const targetChannel = await channelManager.fetch(targetChannelId);
-  if (!targetChannel)
-    throw `MoveMessage: Channel not found with id ${targetChannelId}`;
+  if (!targetChannel) throw `MoveMessage: Channel not found with id ${targetChannelId}`;
   console.log("fetched targetChannel");
 
-  const webhookChannel = targetChannel.isThread()
-    ? targetChannel.parent
-    : targetChannel;
+  const webhookChannel = targetChannel.isThread() ? targetChannel.parent : targetChannel;
 
-  if (!webhookChannel)
-    throw `MoveMessage: Channel not found with id ${targetChannelId}`;
-  if (
-    !webhookChannel.isSendable() &&
-    !webhookChannel.isThread() &&
-    !webhookChannel.isThreadOnly()
-  )
+  if (!webhookChannel) throw `MoveMessage: Channel not found with id ${targetChannelId}`;
+  if (!webhookChannel.isSendable() && !webhookChannel.isThread() && !webhookChannel.isThreadOnly())
     throw `MoveMessage: Channel ${targetChannelId} is not sendable`;
 
   const webhook = await webhookChannel.createWebhook({

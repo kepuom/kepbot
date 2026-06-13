@@ -4,12 +4,8 @@ import {
   inlineCode,
   type ChatInputCommandInteraction,
 } from "discord.js";
-import {
-  deleteResponse,
-  getUserResponses,
-  insertResponse,
-} from "@kepbot/db/responses";
-import { createCommand } from "~/lib/createCommand";
+import { deleteResponse, getUserResponses, insertResponse } from "@kepbot/db/responses";
+import { createCommand } from "../lib/createCommand.ts";
 
 export const responsesCommand = createCommand({
   data: {
@@ -88,33 +84,21 @@ export const responsesCommand = createCommand({
       interaction.options.getSubcommand() as (typeof data)["options"][number]["name"];
     switch (subcommand) {
       case "add": {
-        const response = interaction.options.getString(
-          data.options[0].options[0].name,
-          true
-        );
+        const response = interaction.options.getString(data.options[0].options[0].name, true);
         if (response.length < 2)
           return await interaction.reply({
             content: "Response too short",
             ephemeral: true,
           });
-        const target = interaction.options.getUser(
-          data.options[0].options[1].name,
-          false
-        );
-        const trigger = interaction.options.getString(
-          data.options[0].options[2].name,
-          false
-        );
+        const target = interaction.options.getUser(data.options[0].options[1].name, false);
+        const trigger = interaction.options.getString(data.options[0].options[2].name, false);
         const userId = interaction.user.id;
         const existing = await getUserResponses({
           userId: interaction.user.id,
         });
         if (
           existing.some(
-            (r) =>
-              r.text === response &&
-              r.targetId === target?.id &&
-              r.trigger === trigger
+            (r) => r.text === response && r.targetId === target?.id && r.trigger === trigger,
           )
         ) {
           await interaction.reply({
@@ -140,20 +124,10 @@ export const responsesCommand = createCommand({
         const responses = await getUserResponses({
           userId: interaction.user.id,
         });
-        const batches = responses.reduce(
-          (acc, curr, i) => {
-            const index = Math.floor(i / 10);
-            if (!acc[index]) acc[index] = [];
-            acc[index].push(curr);
-            return acc;
-          },
-          [] as (typeof responses)[]
-        );
         const txtFile = responses
           .map(({ id, text, trigger, targetId }) => {
             const target = targetId
-              ? (interaction.guild?.members.cache.get(targetId)?.user
-                  .username ?? targetId)
+              ? (interaction.guild?.members.cache.get(targetId)?.user.username ?? targetId)
               : undefined;
             return `${id} - ${text}${trigger ? ` (trigger:${trigger})` : ""}${target ? ` (target:${target})` : ""}`;
           })
@@ -171,11 +145,8 @@ export const responsesCommand = createCommand({
       }
 
       case "remove": {
-        const id = interaction.options.getInteger(
-          data.options[1].options[0].name,
-          true
-        );
-        const [{ affectedRows }, packets] = await deleteResponse({
+        const id = interaction.options.getInteger(data.options[1].options[0].name, true);
+        const [{ affectedRows }] = await deleteResponse({
           id,
           userId: interaction.user.id,
         });

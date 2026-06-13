@@ -1,14 +1,14 @@
 import {
   ApplicationCommandType,
-  ChatInputCommandInteraction,
-  MessageContextMenuCommandInteraction,
-  UserContextMenuCommandInteraction,
+  type ChatInputCommandInteraction,
+  type MessageContextMenuCommandInteraction,
+  type UserContextMenuCommandInteraction,
 } from "discord.js";
-import type { BotCommand } from "~/lib/createCommand";
-import { moveMessageCtxCommand } from "./moveMessageCtx";
-import { moveMessageSlashCommand } from "./moveMessageSlash";
-import { responsesCommand } from "./responses";
-import { voteMuteCommand } from "./voteMute";
+import type { BotCommand } from "../lib/createCommand.ts";
+import { moveMessageCtxCommand } from "./moveMessageCtx.ts";
+import { moveMessageSlashCommand } from "./moveMessageSlash.ts";
+import { responsesCommand } from "./responses.ts";
+import { voteMuteCommand } from "./voteMute.ts";
 
 export const commands = [
   responsesCommand,
@@ -17,17 +17,11 @@ export const commands = [
   voteMuteCommand,
 ] as unknown as BotCommand[];
 
-export const {
-  chatInputCommands,
-  userCtxMenuCommands,
-  messageCtxMenuCommands,
-} = commands.reduce(
+export const { chatInputCommands, userCtxMenuCommands, messageCtxMenuCommands } = commands.reduce(
   (acc, command) => {
     switch (command.data.type) {
       case ApplicationCommandType.ChatInput: {
-        acc.chatInputCommands.push(
-          command as BotCommand<ChatInputCommandInteraction>
-        );
+        acc.chatInputCommands.push(command as BotCommand<ChatInputCommandInteraction>);
         return acc;
       }
 
@@ -53,5 +47,5 @@ export const {
     chatInputCommands: BotCommand<ChatInputCommandInteraction>[];
     userCtxMenuCommands: BotCommand<UserContextMenuCommandInteraction>[];
     messageCtxMenuCommands: BotCommand<MessageContextMenuCommandInteraction>[];
-  }
+  },
 );

@@ -1,30 +1,31 @@
 {
-	"name": "@kepbot/bot",
-	"private": true,
-	"module": "index.ts",
-	"type": "module",
-	"scripts": {
-		"dev": "pnpm with-env tsx index.ts",
-		"start": "pnpm with-env tsx index.ts",
-		"build": "echo 'No bot build specified'",
-		"registerCommand": "tsx scripts/registerCommand.ts",
-		"deleteCommand": "tsx scripts/deleteCommand.ts",
-		"clearCommands": "tsx scripts/clearCommands.ts",
-		"with-env": "dotenv -e ../../.env --"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "1.5.3",
-		"drizzle-kit": "^0.20.14",
-		"tsx": "^4.19.1"
-	},
-	"peerDependencies": {
-		"typescript": "^5.0.0"
-	},
-	"dependencies": {
-		"@kepbot/db": "workspace:*",
-		"dayjs": "^1.11.10",
-		"discord.js": "^14.14.1",
-		"drizzle-orm": "^0.29.3",
-		"typescript": "^5.3.0"
-	}
+  "name": "@kepbot/bot",
+  "private": true,
+  "type": "module",
+  "module": "index.ts",
+  "scripts": {
+    "dev": "node --env-file=../../.env index.ts",
+    "start": "node --env-file=../../.env index.ts",
+    "build": "echo 'No bot build specified'",
+    "registerCommand": "node --env-file=../../.env scripts/registerCommand.ts",
+    "deleteCommand": "node --env-file=../../.env scripts/deleteCommand.ts",
+    "clearCommands": "node --env-file=../../.env scripts/clearCommands.ts",
+    "check-types": "tsgo --noEmit"
+  },
+  "dependencies": {
+    "@kepbot/db": "workspace:*",
+    "dayjs": "^1.11.10",
+    "discord.js": "^14.14.1",
+    "drizzle-orm": "^0.29.3",
+    "typescript": "^5.3.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.20.14"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
 }

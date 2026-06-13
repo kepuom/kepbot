@@ -1,4 +1,4 @@
-import { defineConfig } from 'drizzle-kit';
+import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
   verbose: true,
@@ -7,6 +7,6 @@ export default defineConfig({
   schema: "./src/db/schema",
   out: "./src/db/drizzle",
   dbCredentials: {
-    uri: process.env.DATABASE_URL as string
-  }
+    uri: process.env.DATABASE_URL as string,
+  },
 });
