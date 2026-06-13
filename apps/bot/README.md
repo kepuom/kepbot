@@ -3,13 +3,21 @@
 To install dependencies:
 
 ```bash
-bun install
+pnpm install
 ```
 
 To run:
 
 ```bash
-bun run index.ts
+pnpm dev
 ```
 
-This project was created using `bun init` in bun v1.0.25. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+The bot runs TypeScript directly with Node 24 using the root `.env` file.
+
+To manage Discord commands:
+
+```bash
+pnpm registerCommand -- --guildId=<guildId> --commandName=<commandName>
+pnpm deleteCommand -- --guildId=<guildId> --commandName=<commandName>
+pnpm clearCommands -- --guildId=<guildId>
+```

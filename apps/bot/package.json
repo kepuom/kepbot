@@ -4,14 +4,13 @@
   "type": "module",
   "module": "index.ts",
   "scripts": {
-    "dev": "pnpm with-env node index.ts",
-    "start": "pnpm with-env node index.ts",
+    "dev": "node --env-file=../../.env index.ts",
+    "start": "node --env-file=../../.env index.ts",
     "build": "echo 'No bot build specified'",
-    "registerCommand": "pnpm with-env node scripts/registerCommand.ts",
-    "deleteCommand": "pnpm with-env node scripts/deleteCommand.ts",
-    "clearCommands": "pnpm with-env node scripts/clearCommands.ts",
-    "check-types": "tsgo --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "registerCommand": "node --env-file=../../.env scripts/registerCommand.ts",
+    "deleteCommand": "node --env-file=../../.env scripts/deleteCommand.ts",
+    "clearCommands": "node --env-file=../../.env scripts/clearCommands.ts",
+    "check-types": "tsgo --noEmit"
   },
   "dependencies": {
     "@kepbot/db": "workspace:*",

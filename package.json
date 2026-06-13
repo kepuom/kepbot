@@ -16,7 +16,6 @@
   "devDependencies": {
     "@types/node": "^24.13.2",
     "@typescript/native-preview": "7.0.0-dev.20260611.2",
-    "dotenv-cli": "^7.4.2",
     "oxfmt": "^0.54.0",
     "oxlint": "^1.69.0"
   },

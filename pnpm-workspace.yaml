@@ -1,6 +1,6 @@
 packages:
   - "packages/*"
-  - "apps/*"
+  - "apps/bot"
 allowBuilds:
   es5-ext: true
   esbuild: true

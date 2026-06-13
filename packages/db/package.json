@@ -8,9 +8,8 @@
   },
   "scripts": {
     "generate": "drizzle-kit generate:mysql",
-    "migrate": "pnpm with-env node migrate.ts",
-    "check-types": "tsgo --noEmit",
-    "with-env": "dotenv -e ../../.env --"
+    "migrate": "node --env-file=../../.env migrate.ts",
+    "check-types": "tsgo --noEmit"
   },
   "dependencies": {
     "drizzle-orm": "^0.29.3",
